@@ -2,15 +2,20 @@ package com.rizz;
 
 public class Task {
     private String name;
-    private int severity;
+    private int priority;
+    private boolean isDone;
 
-    public Task(String name, int severity) {
+
+
+    public Task(String name, int priority) {
         this.name = name;
-        if (severity >= 1 && severity <=5) {
-            this.severity = severity;
+        if (priority >= 1 && priority <=5) {
+            this.priority = priority;
         }else {
-            System.out.println("Invalid Severity\nValid Entries : 1 to 5");
+            System.out.println("Invalid Priority\nValid Entries : 1 to 5");
         }
+        this.isDone = false;
+
     }
 
 
@@ -22,16 +27,24 @@ public class Task {
         this.name = name;
     }
 
-    public int getSeverity() {
-        return severity;
+    public int getPriority() {
+        return priority;
     }
 
-    public void setSeverity(int severity) {
-        this.severity = severity;
-        if (severity >= 1 && severity <=5) {
-            this.severity = severity;
+    public void setPriority(int priority) {
+        this.priority = priority;
+        if (priority >= 1 && priority <=5) {
+            this.priority = priority;
         }else {
             System.out.println("Invalid Severity\nValid Entries : 1 to 5");
         }
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
     }
 }
