@@ -7,13 +7,20 @@ import java.util.Scanner;
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) throws InputMismatchException {
+    public static void main(String[] args) {
+        System.out.println("***** WELCOME TO TasKy *****");
         LinkedList<Task> tasksList = new LinkedList<>();
         boolean flag = true;
         welcomeScreen();
         while (flag) {
             System.out.print("\nEnter choice: ");
-            int input = scanner.nextInt();
+            int input;
+            try {
+                input = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Sorry... Invalid input\n");
+                input = 6;
+            }
             scanner.nextLine();
             switch (input) {
                 case 1: {
@@ -52,7 +59,6 @@ public class Main {
     }
 
     private static void welcomeScreen() {
-        System.out.println("***** WELCOME TO TasKy *****");
         System.out.println("Please enter your choice:- ");
         System.out.println("\t1. To view your current tasks.");
         System.out.println("\t2. To add new task.");
@@ -64,16 +70,31 @@ public class Main {
 
     private static void printAllTasks(LinkedList<Task> tasks) {
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + ". " + tasks.get(i).getName() + " [" + tasks.get(i).getSeverity() + "]");
+            System.out.println((i + 1) + ". " + tasks.get(i).getName() + " [" + printStars(tasks.get(i).getPriority()) + "]");
         }
     }
 
     private static Task addNewTask() {
         System.out.print("What's the task?\n--> ");
         String taskName = scanner.nextLine();
-        System.out.print("How important is it? [ Rate from 1 to 5 ]\n--> ");
-        int important = scanner.nextInt();
-        return new Task(taskName, important);
+        while (true) {
+            try {
+                System.out.print("How important is it? \nRate from 1(Not that important) to 5(Highly critical job)\n--> ");
+                int important = scanner.nextInt();
+                return new Task(taskName, important);
+            } catch (InputMismatchException e) {
+                System.out.println("\nSorry!! Invalid input... \nNumbers from 1 to 5 are valid only\n");
+                scanner.nextLine();
+            }
+        }
+
     }
 
+    private static String printStars(int n){
+        StringBuilder stars = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            stars.append("*");
+        }
+        return stars.toString();
+    }
 }
