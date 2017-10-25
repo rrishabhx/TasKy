@@ -38,6 +38,10 @@ public class Main {
                     tasksList.add(newT);
                     break;
                 }
+                case 3: {
+                    System.out.println("Choose the completed tasks from the list below : ");
+                    printAllTasks(tasksList);
+                }
                 case 4: {
                     System.out.println("Removing task from your list...\nChoose the task no. from the below mentioned list:");
                     printAllTasks(tasksList);
@@ -70,7 +74,10 @@ public class Main {
 
     private static void printAllTasks(LinkedList<Task> tasks) {
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + ". " + tasks.get(i).getName() + " [" + printStars(tasks.get(i).getPriority()) + "]");
+//            System.out.println(" [" + printStars(tasks.get(i).getPriority()) + "] " + "{" + tasks.get(i).isDone() + "} " + (i + 1) + ". " + tasks.get(i).getName());
+//             System.out.printf("[%-5s] {%-5s} ==> %3s. %s\n","IMP","STATUS","ID","TASK");
+            System.out.printf("[%-5s] {%-5s} ==> %3d. %s\n"
+                    ,printStars(tasks.get(i).getPriority()),tasks.get(i).isDone(),(i+1),tasks.get(i).getName());
         }
     }
 
@@ -90,7 +97,7 @@ public class Main {
 
     }
 
-    private static String printStars(int n){
+    private static String printStars(int n) {
         StringBuilder stars = new StringBuilder();
         for (int i = 0; i < n; i++) {
             stars.append("*");
