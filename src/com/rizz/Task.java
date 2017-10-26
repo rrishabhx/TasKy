@@ -6,7 +6,6 @@ public class Task {
     private boolean isDone;
 
 
-
     public Task(String name, int priority) {
         this.name = name;
         if (priority >= 1 && priority <=5) {
@@ -16,6 +15,16 @@ public class Task {
         }
         this.isDone = false;
 
+    }
+
+    public Task(String name, int priority, boolean isDone) {
+        this.name = name;
+        if (priority >= 1 && priority <=5) {
+            this.priority = priority;
+        }else {
+            System.out.println("Invalid Priority\nValid Entries : 1 to 5");
+        }
+        this.isDone = isDone;
     }
 
 

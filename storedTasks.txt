@@ -1,0 +1,5 @@
+do job1<<>>2<<>>false
+do job2<<>>1<<>>false
+do job3<<>>4<<>>true
+do job4<<>>5<<>>false
+do job5<<>>3<<>>true

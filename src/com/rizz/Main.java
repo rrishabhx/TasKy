@@ -1,5 +1,6 @@
 package com.rizz;
 
+import java.io.*;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -7,9 +8,21 @@ import java.util.Scanner;
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println("***** WELCOME TO TasKy *****");
         LinkedList<Task> tasksList = new LinkedList<>();
+
+        //Reading Data from stored task file
+        try (BufferedReader taskFile = new BufferedReader(new FileReader("storedTasks.txt"))) {
+            String input;
+            while ((input = taskFile.readLine()) != null) {
+                String[] data = input.split("<<>>");
+                int imp = Integer.parseInt(data[1]);
+                boolean taskStatus = Boolean.parseBoolean(data[2]);
+                tasksList.add(new Task(data[0],imp,taskStatus)) ;
+            }
+        }
+
         boolean flag = true;
         welcomeScreen();
         while (flag) {
@@ -36,11 +49,15 @@ public class Main {
                     System.out.println("Adding new task to your list...");
                     Task newT = addNewTask();
                     tasksList.add(newT);
+
                     break;
                 }
                 case 3: {
-                    System.out.println("Choose the completed tasks from the list below : ");
+                    System.out.println("Choose the task you completed from the list below : ");
                     printAllTasks(tasksList);
+                    int task2update = scanner.nextInt();
+                    tasksList.get(task2update - 1).setDone(true);
+                    break;
                 }
                 case 4: {
                     System.out.println("Removing task from your list...\nChoose the task no. from the below mentioned list:");
@@ -77,7 +94,7 @@ public class Main {
 //            System.out.println(" [" + printStars(tasks.get(i).getPriority()) + "] " + "{" + tasks.get(i).isDone() + "} " + (i + 1) + ". " + tasks.get(i).getName());
 //             System.out.printf("[%-5s] {%-5s} ==> %3s. %s\n","IMP","STATUS","ID","TASK");
             System.out.printf("[%-5s] {%-5s} ==> %3d. %s\n"
-                    ,printStars(tasks.get(i).getPriority()),tasks.get(i).isDone(),(i+1),tasks.get(i).getName());
+                    , printStars(tasks.get(i).getPriority()), tasks.get(i).isDone(), (i + 1), tasks.get(i).getName());
         }
     }
 
