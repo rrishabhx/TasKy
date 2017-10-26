@@ -1,5 +1,3 @@
-do job1<<>>2<<>>false
-do job2<<>>1<<>>false
-do job3<<>>4<<>>true
-do job4<<>>5<<>>false
-do job5<<>>3<<>>true
+do job1::::2::::false
+do job 2::::5::::false
+hola::::4::::false

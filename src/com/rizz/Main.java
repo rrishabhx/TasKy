@@ -16,10 +16,10 @@ public class Main {
         try (BufferedReader taskFile = new BufferedReader(new FileReader("storedTasks.txt"))) {
             String input;
             while ((input = taskFile.readLine()) != null) {
-                String[] data = input.split("<<>>");
+                String[] data = input.split("::::");
                 int imp = Integer.parseInt(data[1]);
                 boolean taskStatus = Boolean.parseBoolean(data[2]);
-                tasksList.add(new Task(data[0],imp,taskStatus)) ;
+                tasksList.add(new Task(data[0], imp, taskStatus));
             }
         }
 
@@ -91,20 +91,19 @@ public class Main {
 
     private static void printAllTasks(LinkedList<Task> tasks) {
         for (int i = 0; i < tasks.size(); i++) {
-//            System.out.println(" [" + printStars(tasks.get(i).getPriority()) + "] " + "{" + tasks.get(i).isDone() + "} " + (i + 1) + ". " + tasks.get(i).getName());
-//             System.out.printf("[%-5s] {%-5s} ==> %3s. %s\n","IMP","STATUS","ID","TASK");
             System.out.printf("[%-5s] {%-5s} ==> %3d. %s\n"
                     , printStars(tasks.get(i).getPriority()), tasks.get(i).isDone(), (i + 1), tasks.get(i).getName());
         }
     }
 
-    private static Task addNewTask() {
+    private static Task addNewTask() throws IOException {
         System.out.print("What's the task?\n--> ");
         String taskName = scanner.nextLine();
         while (true) {
             try {
                 System.out.print("How important is it? \nRate from 1(Not that important) to 5(Highly critical job)\n--> ");
                 int important = scanner.nextInt();
+                addToFile(new Task(taskName, important));
                 return new Task(taskName, important);
             } catch (InputMismatchException e) {
                 System.out.println("\nSorry!! Invalid input... \nNumbers from 1 to 5 are valid only\n");
@@ -112,6 +111,14 @@ public class Main {
             }
         }
 
+    }
+
+    private static void addToFile(Task task) throws IOException {
+        //Appending old tasks in the sored file
+        try (BufferedWriter taskFile = new BufferedWriter(new FileWriter("storedTasks.txt",true))) {
+            taskFile.write(task.getName() + "::::" + task.getPriority() + "::::" + task.isDone());
+            taskFile.newLine();
+        }
     }
 
     private static String printStars(int n) {
