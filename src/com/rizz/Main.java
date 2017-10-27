@@ -16,7 +16,7 @@ public class Main {
         LinkedList<Task> tasksList = new LinkedList<>();
 
         //Reading Data from stored task file
-        try (BufferedReader taskFile = new BufferedReader(new FileReader("storedTasks.txt"))) {
+        try (BufferedReader taskFile = new BufferedReader(new FileReader(".storedTasks.txt"))) {
             String input;
             while ((input = taskFile.readLine()) != null) {
                 String[] data = input.split("::::");
@@ -24,6 +24,9 @@ public class Main {
                 boolean taskStatus = Boolean.parseBoolean(data[2]);
                 tasksList.add(new Task(data[0], imp, taskStatus));
             }
+        } catch (IOException e) {
+            //Creating new file to store Tasks
+            new File(".storedTasks.txt");
         }
 
         boolean flag = true;
@@ -56,15 +59,15 @@ public class Main {
                     break;
                 }
                 case 3: {
-                    System.out.println("Choose the task you completed from the list below : ");
                     printAllTasks(tasksList);
+                    System.out.print("\nChoose the task you completed from the above list: ");
                     int task2update = scanner.nextInt();
                     tasksList.get(task2update - 1).setDone(true);
                     break;
                 }
                 case 4: {
-                    System.out.println("Removing task from your list...\nChoose the task no. from the below mentioned list:");
                     printAllTasks(tasksList);
+                    System.out.print("\nRemoving task from your list...\nChoose the task no. from the above mentioned list: ");
                     int task2remove = scanner.nextInt();
                     tasksList.remove(task2remove - 1);
                     System.out.println("Task removed successfully from your list");
@@ -76,9 +79,9 @@ public class Main {
                 }
                 case 0: {
                     flag = false;
-                    System.out.println("\n*---------------------*\n");
-                    System.out.println("\n*------ So Long ------*\n");
-                    System.out.println("\n*---------------------*\n");
+                    System.out.println("\n*---------------------*");
+                    System.out.println("*------ GoodBye ------*");
+                    System.out.println("*---------------------*\n");
                     updateFile(tasksList);
                 }
 
@@ -122,14 +125,14 @@ public class Main {
 
     private static void addToFile(Task task) throws IOException {
         //Appending old tasks in the stored file
-        try (BufferedWriter taskFile = new BufferedWriter(new FileWriter("storedTasks.txt", true))) {
+        try (BufferedWriter taskFile = new BufferedWriter(new FileWriter(".storedTasks.txt", true))) {
             taskFile.write(task.getName() + "::::" + task.getPriority() + "::::" + task.isDone());
             taskFile.newLine();
         }
     }
 
     private static void updateFile(LinkedList<Task> tasks) throws IOException {
-        try (BufferedWriter taskFile = new BufferedWriter(new FileWriter("storedTasks.txt"))) {
+        try (BufferedWriter taskFile = new BufferedWriter(new FileWriter(".storedTasks.txt"))) {
             for(Task t : tasks) {
                 taskFile.write(t.getName() + "::::" + t.getPriority() + "::::" + t.isDone());
                 taskFile.newLine();

@@ -1,8 +1,0 @@
-do job1::::2::::false
-do job 2::::5::::false
-hola::::4::::false
-play videogames::::3::::true
-complete cdl ha testing ::::2::::false
-party::::1::::true
-go to hell::::5::::false
-test task::::4::::false
