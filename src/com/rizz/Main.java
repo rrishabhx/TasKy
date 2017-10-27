@@ -9,7 +9,10 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
-        System.out.println("***** WELCOME TO TasKy *****");
+        System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+        System.out.println("*-*-*-*-* WELCOME TO TasKy *-*-*-*-*");
+        System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
+
         LinkedList<Task> tasksList = new LinkedList<>();
 
         //Reading Data from stored task file
@@ -35,6 +38,7 @@ public class Main {
                 input = 6;
             }
             scanner.nextLine();
+            System.out.println();
             switch (input) {
                 case 1: {
                     if (tasksList.size() == 0) {
@@ -49,7 +53,6 @@ public class Main {
                     System.out.println("Adding new task to your list...");
                     Task newT = addNewTask();
                     tasksList.add(newT);
-
                     break;
                 }
                 case 3: {
@@ -68,13 +71,17 @@ public class Main {
                     break;
                 }
                 case 5: {
-                    flag = false;
-                    System.out.println("BYE-BYE");
+                    welcomeScreen();
                     break;
                 }
-                case 6: {
-                    welcomeScreen();
+                case 0: {
+                    flag = false;
+                    System.out.println("\n*---------------------*\n");
+                    System.out.println("\n*------ So Long ------*\n");
+                    System.out.println("\n*---------------------*\n");
+                    updateFile(tasksList);
                 }
+
             }
         }
     }
@@ -85,8 +92,8 @@ public class Main {
         System.out.println("\t2. To add new task.");
         System.out.println("\t3. To mark task as complete.");
         System.out.println("\t4. To delete a task.");
-        System.out.println("\t5. To quit.");
-        System.out.println("\t6. To view menu.");
+        System.out.println("\t5. To view menu.");
+        System.out.println("\t0. To quit.");
     }
 
     private static void printAllTasks(LinkedList<Task> tasks) {
@@ -114,10 +121,19 @@ public class Main {
     }
 
     private static void addToFile(Task task) throws IOException {
-        //Appending old tasks in the sored file
-        try (BufferedWriter taskFile = new BufferedWriter(new FileWriter("storedTasks.txt",true))) {
+        //Appending old tasks in the stored file
+        try (BufferedWriter taskFile = new BufferedWriter(new FileWriter("storedTasks.txt", true))) {
             taskFile.write(task.getName() + "::::" + task.getPriority() + "::::" + task.isDone());
             taskFile.newLine();
+        }
+    }
+
+    private static void updateFile(LinkedList<Task> tasks) throws IOException {
+        try (BufferedWriter taskFile = new BufferedWriter(new FileWriter("storedTasks.txt"))) {
+            for(Task t : tasks) {
+                taskFile.write(t.getName() + "::::" + t.getPriority() + "::::" + t.isDone());
+                taskFile.newLine();
+            }
         }
     }
 
