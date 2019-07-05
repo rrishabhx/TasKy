@@ -1,4 +1,6 @@
-package com.rizz;
+package com.rizz.startup;
+
+import com.rizz.util.ConsoleColors;
 
 import java.io.*;
 import java.util.InputMismatchException;
@@ -9,9 +11,9 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
-        System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
-        System.out.println("*-*-*-*-* WELCOME TO TasKy *-*-*-*-*");
-        System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
+        colorPrintln("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*", ConsoleColors.PURPLE_BOLD);
+        colorPrintln("*-*-*-*-* WELCOME TO TasKy *-*-*-*-*", ConsoleColors.PURPLE_BOLD);
+        colorPrintln("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n", ConsoleColors.PURPLE_BOLD);
 
         LinkedList<Task> tasksList = new LinkedList<>();
 
@@ -32,12 +34,12 @@ public class Main {
         boolean flag = true;
         welcomeScreen();
         while (flag) {
-            System.out.print("\nEnter choice: ");
+            colorPrint("\nEnter choice: ", ConsoleColors.GREEN_BOLD);
             int input;
             try {
                 input = scanner.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Sorry... Invalid input\n");
+                colorPrintln("Sorry... Invalid input\n", ConsoleColors.RED);
                 input = 6;
             }
             scanner.nextLine();
@@ -45,32 +47,32 @@ public class Main {
             switch (input) {
                 case 1: {
                     if (tasksList.size() == 0) {
-                        System.out.println("Well... There's not a single task in your agenda.\nPretty cool -_- ");
+                        colorPrintln("Well... There's not a single task in your agenda.\nPretty cool -_- ", ConsoleColors.PURPLE);
                     } else {
-                        System.out.println("Following tasks are due: ");
+                        colorPrintln("Following tasks are due: ", ConsoleColors.RED_BRIGHT);
                         printAllTasks(tasksList);
                     }
                     break;
                 }
                 case 2: {
-                    System.out.println("Adding new task to your list...");
+                    colorPrintln("Adding new task to your list...", ConsoleColors.BLUE);
                     Task newT = addNewTask();
                     tasksList.add(newT);
                     break;
                 }
                 case 3: {
                     printAllTasks(tasksList);
-                    System.out.print("\nChoose the task you completed from the above list: ");
+                    colorPrint("\nChoose the task you completed from the above list: ", ConsoleColors.BLUE_BOLD);
                     int task2update = scanner.nextInt();
                     tasksList.get(task2update - 1).setDone(true);
                     break;
                 }
                 case 4: {
                     printAllTasks(tasksList);
-                    System.out.print("\nRemoving task from your list...\nChoose the task no. from the above mentioned list: ");
+                    colorPrint("\nRemoving task from your list...\nChoose the task no. from the above mentioned list: ", ConsoleColors.BLUE);
                     int task2remove = scanner.nextInt();
                     tasksList.remove(task2remove - 1);
-                    System.out.println("Task removed successfully from your list");
+                    colorPrintln("Task removed successfully from your list", ConsoleColors.BLUE);
                     break;
                 }
                 case 5: {
@@ -79,10 +81,14 @@ public class Main {
                 }
                 case 0: {
                     flag = false;
-                    System.out.println("\n*---------------------*");
-                    System.out.println("*------ GoodBye ------*");
-                    System.out.println("*---------------------*\n");
+                    colorPrintln("\n*---------------------*", ConsoleColors.CYAN_BOLD);
+                    colorPrintln("*------ GoodBye ------*", ConsoleColors.CYAN_BOLD);
+                    colorPrintln("*---------------------*\n", ConsoleColors.CYAN_BOLD);
                     updateFile(tasksList);
+                    break;
+                }
+                default: {
+                    colorPrint("xxx INVALID INPUT xxx", ConsoleColors.RED);
                 }
 
             }
@@ -90,13 +96,13 @@ public class Main {
     }
 
     private static void welcomeScreen() {
-        System.out.println("Please enter your choice:- ");
-        System.out.println("\t1. To view your current tasks.");
-        System.out.println("\t2. To add new task.");
-        System.out.println("\t3. To mark task as complete.");
-        System.out.println("\t4. To delete a task.");
-        System.out.println("\t5. To view menu.");
-        System.out.println("\t0. To quit.");
+        colorPrintln("Please enter your choice:- ", ConsoleColors.BLUE);
+        colorPrintln("\t1. To view your current tasks.", ConsoleColors.BLUE);
+        colorPrintln("\t2. To add new task.", ConsoleColors.BLUE);
+        colorPrintln("\t3. To mark task as complete.", ConsoleColors.BLUE);
+        colorPrintln("\t4. To delete a task.", ConsoleColors.BLUE);
+        colorPrintln("\t5. To view menu.", ConsoleColors.BLUE);
+        colorPrintln("\t0. To quit.", ConsoleColors.BLUE);
     }
 
     private static void printAllTasks(LinkedList<Task> tasks) {
@@ -107,16 +113,16 @@ public class Main {
     }
 
     private static Task addNewTask() throws IOException {
-        System.out.print("What's the task?\n--> ");
+        colorPrint("What's the task?\n--> ", ConsoleColors.BLUE);
         String taskName = scanner.nextLine();
         while (true) {
             try {
-                System.out.print("How important is it? \nRate from 1(Not that important) to 5(Highly critical job)\n--> ");
+                colorPrint("How important is it? \nRate from 1(Not that important) to 5(Highly critical job)\n--> ", ConsoleColors.CYAN);
                 int important = scanner.nextInt();
                 addToFile(new Task(taskName, important));
                 return new Task(taskName, important);
             } catch (InputMismatchException e) {
-                System.out.println("\nSorry!! Invalid input... \nNumbers from 1 to 5 are valid only\n");
+                colorPrintln("\nSorry!! Invalid input... \nNumbers from 1 to 5 are valid only\n", ConsoleColors.RED);
                 scanner.nextLine();
             }
         }
@@ -133,7 +139,7 @@ public class Main {
 
     private static void updateFile(LinkedList<Task> tasks) throws IOException {
         try (BufferedWriter taskFile = new BufferedWriter(new FileWriter(".storedTasks.txt"))) {
-            for(Task t : tasks) {
+            for (Task t : tasks) {
                 taskFile.write(t.getName() + "::::" + t.getPriority() + "::::" + t.isDone());
                 taskFile.newLine();
             }
@@ -147,4 +153,13 @@ public class Main {
         }
         return stars.toString();
     }
+
+    private static void colorPrintln(Object msg, String color) {
+        System.out.println(color + msg + ConsoleColors.RESET);
+    }
+
+    private static void colorPrint(Object msg, String color) {
+        System.out.print(color + msg + ConsoleColors.RESET);
+    }
+
 }

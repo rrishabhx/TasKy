@@ -1,4 +1,4 @@
-package com.rizz;
+package com.rizz.startup;
 
 public class Task {
     private String name;
