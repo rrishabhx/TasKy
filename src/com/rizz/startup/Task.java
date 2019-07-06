@@ -1,5 +1,7 @@
 package com.rizz.startup;
 
+import com.rizz.util.ConsoleColors;
+
 public class Task {
     private String name;
     private int priority;
@@ -8,10 +10,10 @@ public class Task {
 
     public Task(String name, int priority) {
         this.name = name;
-        if (priority >= 1 && priority <=5) {
+        if (priority >= 1 && priority <= 5) {
             this.priority = priority;
-        }else {
-            System.out.println("Invalid Priority\nValid Entries : 1 to 5");
+        } else {
+            colorPrintln("Invalid Priority\nValid Entries : 1 to 5", ConsoleColors.RED);
         }
         this.isDone = false;
 
@@ -19,10 +21,10 @@ public class Task {
 
     public Task(String name, int priority, boolean isDone) {
         this.name = name;
-        if (priority >= 1 && priority <=5) {
+        if (priority >= 1 && priority <= 5) {
             this.priority = priority;
-        }else {
-            System.out.println("Invalid Priority\nValid Entries : 1 to 5");
+        } else {
+            colorPrintln("Invalid Priority\nValid Entries : 1 to 5", ConsoleColors.RED);
         }
         this.isDone = isDone;
     }
@@ -42,10 +44,10 @@ public class Task {
 
     public void setPriority(int priority) {
         this.priority = priority;
-        if (priority >= 1 && priority <=5) {
+        if (priority >= 1 && priority <= 5) {
             this.priority = priority;
-        }else {
-            System.out.println("Invalid Severity\nValid Entries : 1 to 5");
+        } else {
+            colorPrintln("Invalid Severity\nValid Entries : 1 to 5", ConsoleColors.RED);
         }
     }
 
@@ -55,5 +57,9 @@ public class Task {
 
     public void setDone(boolean done) {
         isDone = done;
+    }
+
+    private void colorPrintln(Object msg, String color) {
+        System.out.println(color + msg + ConsoleColors.RESET);
     }
 }

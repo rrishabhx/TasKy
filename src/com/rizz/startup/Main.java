@@ -9,30 +9,17 @@ import java.util.Scanner;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
+    private static LinkedList<Task> tasksList = new LinkedList<>();
 
-    public static void main(String[] args) throws IOException {
-        colorPrintln("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*", ConsoleColors.PURPLE_BOLD);
-        colorPrintln("*-*-*-*-* WELCOME TO TasKy *-*-*-*-*", ConsoleColors.PURPLE_BOLD);
-        colorPrintln("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n", ConsoleColors.PURPLE_BOLD);
+    public static void main(String[] args) {
+        printWelcome();
+        loadSavedTasks();
+        showTaskyPrompt();
+    }
 
-        LinkedList<Task> tasksList = new LinkedList<>();
-
-        //Reading Data from stored task file
-        try (BufferedReader taskFile = new BufferedReader(new FileReader(".storedTasks.txt"))) {
-            String input;
-            while ((input = taskFile.readLine()) != null) {
-                String[] data = input.split("::::");
-                int imp = Integer.parseInt(data[1]);
-                boolean taskStatus = Boolean.parseBoolean(data[2]);
-                tasksList.add(new Task(data[0], imp, taskStatus));
-            }
-        } catch (IOException e) {
-            //Creating new file to store Tasks
-            new File(".storedTasks.txt");
-        }
-
+    private static void showTaskyPrompt() {
         boolean flag = true;
-        welcomeScreen();
+        choiceScreen();
         while (flag) {
             colorPrint("\nEnter choice: ", ConsoleColors.GREEN_BOLD);
             int input;
@@ -56,7 +43,12 @@ public class Main {
                 }
                 case 2: {
                     colorPrintln("Adding new task to your list...", ConsoleColors.BLUE);
-                    Task newT = addNewTask();
+                    Task newT = null;
+                    try {
+                        newT = addNewTask();
+                    } catch (IOException e) {
+                        colorPrint("xxx Exception occurred while adding new task. Try restarting the app xxx", ConsoleColors.RED);
+                    }
                     tasksList.add(newT);
                     break;
                 }
@@ -76,15 +68,18 @@ public class Main {
                     break;
                 }
                 case 5: {
-                    welcomeScreen();
+                    choiceScreen();
                     break;
                 }
                 case 0: {
                     flag = false;
-                    colorPrintln("\n*---------------------*", ConsoleColors.CYAN_BOLD);
-                    colorPrintln("*------ GoodBye ------*", ConsoleColors.CYAN_BOLD);
-                    colorPrintln("*---------------------*\n", ConsoleColors.CYAN_BOLD);
-                    updateFile(tasksList);
+                    printGoodBye();
+
+                    try {
+                        updateFile(tasksList);
+                    } catch (IOException e) {
+                        colorPrint("xxx Save File corrupted. Try restarting the app xxx", ConsoleColors.RED);
+                    }
                     break;
                 }
                 default: {
@@ -95,7 +90,23 @@ public class Main {
         }
     }
 
-    private static void welcomeScreen() {
+    private static void loadSavedTasks() {
+        //Reading Data from stored task file
+        try (BufferedReader taskFile = new BufferedReader(new FileReader(".storedTasks.txt"))) {
+            String input;
+            while ((input = taskFile.readLine()) != null) {
+                String[] data = input.split("::::");
+                int imp = Integer.parseInt(data[1]);
+                boolean taskStatus = Boolean.parseBoolean(data[2]);
+                tasksList.add(new Task(data[0], imp, taskStatus));
+            }
+        } catch (IOException e) {
+            //Creating new file to store Tasks
+            new File(".storedTasks.txt");
+        }
+    }
+
+    private static void choiceScreen() {
         colorPrintln("Please enter your choice:- ", ConsoleColors.BLUE);
         colorPrintln("\t1. To view your current tasks.", ConsoleColors.BLUE);
         colorPrintln("\t2. To add new task.", ConsoleColors.BLUE);
@@ -154,12 +165,29 @@ public class Main {
         return stars.toString();
     }
 
-    private static void colorPrintln(Object msg, String color) {
-        System.out.println(color + msg + ConsoleColors.RESET);
+
+    private static void printWelcome() {
+        colorPrintln("╦ ╦┌─┐┬  ┌─┐┌─┐┌┬┐┌─┐  ┌┬┐┌─┐  ╔╦╗┌─┐┌─┐┬┌─┬ ┬\n" +
+                "║║║├┤ │  │  │ ││││├┤    │ │ │   ║ ├─┤└─┐├┴┐└┬┘\n" +
+                "╚╩╝└─┘┴─┘└─┘└─┘┴ ┴└─┘   ┴ └─┘   ╩ ┴ ┴└─┘┴ ┴ ┴ ", ConsoleColors.PURPLE_BOLD);
+    }
+
+    private static void printGoodBye() {
+        colorPrint("★─▄█▀▀║░▄█▀▄║▄█▀▄║██▀▄║─★\n" +
+                "★─██║▀█║██║█║██║█║██║█║─★\n" +
+                "★─▀███▀║▀██▀║▀██▀║███▀║─★\n" +
+                "★───────────────────────★\n" +
+                "★───▐█▀▄─ ▀▄─▄▀ █▀▀──█───★\n" +
+                "★───▐█▀▀▄ ──█── █▀▀──▀───★\n" +
+                "★───▐█▄▄▀ ──▀── ▀▀▀──▄───★", ConsoleColors.CYAN);
     }
 
     private static void colorPrint(Object msg, String color) {
         System.out.print(color + msg + ConsoleColors.RESET);
+    }
+
+    private static void colorPrintln(Object msg, String color) {
+        System.out.println(color + msg + ConsoleColors.RESET);
     }
 
 }
