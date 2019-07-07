@@ -10,6 +10,8 @@ import java.util.Scanner;
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static LinkedList<Task> tasksList = new LinkedList<>();
+    private static String TASKY_HOME = System.getProperty("user.home") + "/.tasky";
+    private static String STORED_TASKS = TASKY_HOME + "/storedTasks.txt";
 
     public static void main(String[] args) {
         printWelcome();
@@ -36,7 +38,7 @@ public class Main {
                     if (tasksList.size() == 0) {
                         colorPrintln("Well... There's not a single task in your agenda.\nPretty cool -_- ", ConsoleColors.PURPLE);
                     } else {
-                        colorPrintln("Following tasks are due: ", ConsoleColors.RED_BRIGHT);
+                        colorPrintln("Tasks List: ", ConsoleColors.RED_BRIGHT);
                         printAllTasks(tasksList);
                     }
                     break;
@@ -91,8 +93,13 @@ public class Main {
     }
 
     private static void loadSavedTasks() {
+        File taskyHome = new File(TASKY_HOME);
+        if (!taskyHome.exists()) {
+            taskyHome.mkdir();
+        }
+
         //Reading Data from stored task file
-        try (BufferedReader taskFile = new BufferedReader(new FileReader(".storedTasks.txt"))) {
+        try (BufferedReader taskFile = new BufferedReader(new FileReader(STORED_TASKS))) {
             String input;
             while ((input = taskFile.readLine()) != null) {
                 String[] data = input.split("::::");
@@ -102,7 +109,7 @@ public class Main {
             }
         } catch (IOException e) {
             //Creating new file to store Tasks
-            new File(".storedTasks.txt");
+            new File(STORED_TASKS);
         }
     }
 
@@ -145,14 +152,14 @@ public class Main {
 
     private static void addToFile(Task task) throws IOException {
         //Appending old tasks in the stored file
-        try (BufferedWriter taskFile = new BufferedWriter(new FileWriter(".storedTasks.txt", true))) {
+        try (BufferedWriter taskFile = new BufferedWriter(new FileWriter(STORED_TASKS, true))) {
             taskFile.write(task.getName() + "::::" + task.getPriority() + "::::" + task.isDone());
             taskFile.newLine();
         }
     }
 
     private static void updateFile(LinkedList<Task> tasks) throws IOException {
-        try (BufferedWriter taskFile = new BufferedWriter(new FileWriter(".storedTasks.txt"))) {
+        try (BufferedWriter taskFile = new BufferedWriter(new FileWriter(STORED_TASKS))) {
             for (Task t : tasks) {
                 taskFile.write(t.getName() + "::::" + t.getPriority() + "::::" + t.isDone());
                 taskFile.newLine();
