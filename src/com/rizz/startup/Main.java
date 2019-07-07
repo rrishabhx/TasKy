@@ -130,8 +130,11 @@ public class Main {
             try {
                 colorPrint("How important is it? \nRate from 1(Not that important) to 5(Highly critical job)\n--> ", ConsoleColors.CYAN);
                 int important = scanner.nextInt();
-                addToFile(new Task(taskName, important));
-                return new Task(taskName, important);
+                Task newT = new Task(taskName, important);
+                if (newT.getPriority() >= 1 && newT.getPriority() <= 5) {
+                    addToFile(newT);
+                    return newT;
+                }
             } catch (InputMismatchException e) {
                 colorPrintln("\nSorry!! Invalid input... \nNumbers from 1 to 5 are valid only\n", ConsoleColors.RED);
                 scanner.nextLine();
