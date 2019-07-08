@@ -38,7 +38,6 @@ public class Main {
                     if (tasksList.size() == 0) {
                         colorPrintln("Well... There's not a single task in your agenda.\nPretty cool -_- ", ConsoleColors.PURPLE);
                     } else {
-                        colorPrintln("Tasks List: ", ConsoleColors.RED_BRIGHT);
                         printAllTasks(tasksList);
                     }
                     break;
@@ -63,7 +62,7 @@ public class Main {
                 }
                 case 4: {
                     printAllTasks(tasksList);
-                    colorPrint("\nRemoving task from your list...\nChoose the task no. from the above mentioned list: ", ConsoleColors.BLUE);
+                    colorPrint("\nRemoving task from your list...\nChoose the task no. from the above list: ", ConsoleColors.BLUE);
                     int task2remove = scanner.nextInt();
                     tasksList.remove(task2remove - 1);
                     colorPrintln("Task removed successfully from your list", ConsoleColors.BLUE);
@@ -124,9 +123,12 @@ public class Main {
     }
 
     private static void printAllTasks(LinkedList<Task> tasks) {
+        printTaskList();
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.printf("[%-5s] {%-5s} ==> %3d. %s\n"
-                    , printStars(tasks.get(i).getPriority()), tasks.get(i).isDone(), (i + 1), tasks.get(i).getName());
+            boolean taskStatus = tasks.get(i).isDone();
+            String color = taskStatus ? ConsoleColors.GREEN_BOLD_BRIGHT : ConsoleColors.YELLOW_BOLD_BRIGHT;
+            System.out.printf("[%-5s]" + color + " {%-5s}".toUpperCase() + ConsoleColors.RESET + " ==> %3d. %s\n"
+                    , printStars(tasks.get(i).getPriority()), taskStatus, (i + 1), tasks.get(i).getName());
         }
     }
 
@@ -183,13 +185,21 @@ public class Main {
     }
 
     private static void printGoodBye() {
-        colorPrint("★─▄█▀▀║░▄█▀▄║▄█▀▄║██▀▄║─★\n" +
+        colorPrintln("★─▄█▀▀║░▄█▀▄║▄█▀▄║██▀▄║─★\n" +
                 "★─██║▀█║██║█║██║█║██║█║─★\n" +
                 "★─▀███▀║▀██▀║▀██▀║███▀║─★\n" +
                 "★───────────────────────★\n" +
                 "★───▐█▀▄─ ▀▄─▄▀ █▀▀──█───★\n" +
                 "★───▐█▀▀▄ ──█── █▀▀──▀───★\n" +
                 "★───▐█▄▄▀ ──▀── ▀▀▀──▄───★", ConsoleColors.CYAN);
+    }
+
+    private static void printTaskList() {
+        colorPrintln("  _   _   _   _   _     _   _   _   _  \n" +
+                " / \\ / \\ / \\ / \\ / \\   / \\ / \\ / \\ / \\ \n" +
+                "( T | A | S | K | S ) ( L | I | S | T )\n" +
+                " \\_/ \\_/ \\_/ \\_/ \\_/   \\_/ \\_/ \\_/ \\_/ ", ConsoleColors.BLUE_BOLD);
+        System.out.println();
     }
 
     private static void colorPrint(Object msg, String color) {
@@ -199,5 +209,6 @@ public class Main {
     private static void colorPrintln(Object msg, String color) {
         System.out.println(color + msg + ConsoleColors.RESET);
     }
+
 
 }
